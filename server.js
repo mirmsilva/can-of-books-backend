@@ -14,7 +14,7 @@ const jwksClient = require('jwks-rsa');
 
 // this function comes directly from the jasonwebtoken docs
 const client = jwksClient({
-  // this url comes from your app on the auth0 dashboard 
+  // this url comes from your app on the auth0 dashboard
   jwksUri: 'https://miriamsilva.us.auth0.com/.well-known/jwks.json'
 });
 
@@ -56,14 +56,37 @@ const Book = mongoose.model('Book', bookSchema);
 //  name: 'Cool Cats',
 //  description: 'A book about the coolest cats',
 //  status: 12,
-//  email: 'testemail@icloud.com'
+//  email: 'jbrown6@alumni.berklee.edu'
 //});
-// saves the book into the DB
-// CoolCatBook.save ((err, bookFromDB) => {
+//saves the book into the DB
+//CoolCatBook.save ((err, bookFromDB) => {
 //  console.log('saved the book');
 //  console.log(bookFromDB);
 //});
 
+//let HarryPotter = new Book({
+//  name: 'Harry Potter',
+//  description: 'wizards',
+//  status: 112,
+//  email: 'jbrown6@alumni.berklee.edu'
+//});
+//saves the book into the DB
+//HarryPotter.save ((err, bookFromDB) => {
+//  console.log('saved the book');
+//  console.log(bookFromDB);
+//});
+
+//let Educated = new Book({
+//  name: 'Educated',
+//  description: 'Ultra orthodox mormon who is not allowed to go to school because the government is indoctrinating everyone.',
+//  status: 201,
+//  email: 'jbrown6@alumni.berklee.edu'
+//});
+//saves the book into the DB
+//Educated.save ((err, bookFromDB) => {
+//  console.log('saved the book');
+//  console.log(bookFromDB);
+//});
 
 app.get('/all-books', (req, res) => {
   Book.find({}, (err, books) => {
