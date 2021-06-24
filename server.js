@@ -7,6 +7,8 @@ require('dotenv').config();
 const cors = require('cors');
 app.use(cors());
 
+app.use(express.json());
+
 //identical code below
 // --------------------
 const jwt = require('jsonwebtoken');
@@ -49,43 +51,43 @@ const bookSchema = new mongoose.Schema({
 });
 
 const Book = mongoose.model('Book', bookSchema);
-//this will be in models folder above
+// //this will be in models folder above
 
-//let CoolCatBook = new Book({
+// let CoolCatBook = new Book({
 //  name: 'Cool Cats',
 //  description: 'A book about the coolest cats',
 //  status: 12,
-//  email: 'jbrown6@alumni.berklee.edu'
-//});
-//saves the book into the DB
-//CoolCatBook.save ((err, bookFromDB) => {
+//  email: 'mirm.silva.90@gmail.com'
+// });
+// //saves the book into the DB
+// CoolCatBook.save ((err, bookFromDB) => {
 //  console.log('saved the book');
 //  console.log(bookFromDB);
-//});
+// });
 
-//let HarryPotter = new Book({
+// let HarryPotter = new Book({
 //  name: 'Harry Potter',
 //  description: 'wizards',
 //  status: 112,
-//  email: 'jbrown6@alumni.berklee.edu'
-//});
-//saves the book into the DB
-//HarryPotter.save ((err, bookFromDB) => {
+//  email: 'mirm.silva.90@gmail.com'
+// });
+// //saves the book into the DB
+// HarryPotter.save ((err, bookFromDB) => {
 //  console.log('saved the book');
 //  console.log(bookFromDB);
-//});
+// });
 
-//let Educated = new Book({
+// let Educated = new Book({
 //  name: 'Educated',
 //  description: 'Ultra orthodox mormon who is not allowed to go to school because the government is indoctrinating everyone.',
 //  status: 201,
-//  email: 'jbrown6@alumni.berklee.edu'
-//});
+//  email: 'mirm.silva.90@gmail.com'
+// });
 //saves the book into the DB
-//Educated.save ((err, bookFromDB) => {
+// Educated.save ((err, bookFromDB) => {
 //  console.log('saved the book');
 //  console.log(bookFromDB);
-//});
+// });
 
 app.get('/all-books', (req, res) => {
   Book.find({}, (err, books) => {
@@ -94,6 +96,7 @@ app.get('/all-books', (req, res) => {
   });
 });
 
+//get books
 app.get('/books', (req, res) => {
   const token = req.headers.authorization.split(' ')[1];
   //make sure token was valid
@@ -111,6 +114,45 @@ app.get('/books', (req, res) => {
   });
 });
 
+//post new books
+app.post('/books', (req, res)=>{
+  //get token & make sure its valid
+  const token = req.headers.authorization.split(' ')[1];
+  jwt.verify(token, getKey, {}, function(err, user) {
+    if(err) {
+      res.status(500).send('invalid token');
+    } else {
+      console.log(req.body);
+      const newBook = new Book({
+        name: req.body.name,
+        description: req.body.description,
+        status: req.body.status,
+        email: user.email
+      });
+      newBook.save((err, savedBookData)=>{
+        res.send(savedBookData)
+      })
+    }
+  });
+});
+
+//delete books by id
+app.delete('/books/:id', (req, res)=>{
+  //get the token and verify that it works
+  const token = req.headers.authorization.split(' ')[1];
+  jwt.verify(token, getKey, {}, function(err, user) {
+    if(err) {
+      res.status(500).send('invalid token');
+    } else {
+      let bookId = req.params.id;
+      Book.deleteOne({_id: bookId, email: user.email})
+      .then(deletedBookData =>{
+        console.log(deletedBookData);
+        res.send('Your has been deleted');
+      });
+    }
+  });
+});
 
 app.get('/test-login', (req, res) => {
   // grab the token that was sent by the frontend
