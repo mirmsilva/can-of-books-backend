@@ -34,7 +34,7 @@ function getKey(header, callback){
 //MongoDB things
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(process.env.DATABASE_URI, {useNewUrlParser: true, useUnifiedTopology: true});
 
 //copied from mongoose quickstart
 const db = mongoose.connection;
