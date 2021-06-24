@@ -89,6 +89,20 @@ const Book = mongoose.model('Book', bookSchema);
 //  console.log(bookFromDB);
 // });
 
+
+app.get('/test-login', (req, res) => {
+  // grab the token that was sent by the frontend
+  const token = req.headers.authorization.split(' ')[1];
+  // make sure the token was valid
+  jwt.verify(token, getKey, {}, function(err, user) {
+    if(err) {
+      res.status(500).send('invalid token');
+    } else {
+      res.send(user);
+    }
+  });
+});
+
 app.get('/all-books', (req, res) => {
   Book.find({}, (err, books) => {
     console.log(books);
@@ -130,8 +144,8 @@ app.post('/books', (req, res)=>{
         email: user.email
       });
       newBook.save((err, savedBookData)=>{
-        res.send(savedBookData)
-      })
+        res.send(savedBookData);
+      });
     }
   });
 });
@@ -146,26 +160,12 @@ app.delete('/books/:id', (req, res)=>{
     } else {
       let bookId = req.params.id;
       Book.deleteOne({_id: bookId, email: user.email})
-      .then(deletedBookData =>{
-        console.log(deletedBookData);
-        res.send('Your has been deleted');
-      });
+        .then(deletedBookData =>{
+          console.log(deletedBookData);
+          res.send('Your book has been deleted');
+        });
     }
   });
 });
-
-app.get('/test-login', (req, res) => {
-  // grab the token that was sent by the frontend
-  const token = req.headers.authorization.split(' ')[1];
-  // make sure the token was valid
-  jwt.verify(token, getKey, {}, function(err, user) {
-    if(err) {
-      res.status(500).send('invalid token');
-    } else {
-      res.send(user);
-    }
-  });
-});
-
 
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
