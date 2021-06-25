@@ -56,42 +56,6 @@ const bookSchema = new mongoose.Schema ({
 const Book = mongoose.model ('Book', bookSchema);
 // //this will be in models folder above
 
-// let CoolCatBook = new Book({
-//  name: 'Cool Cats',
-//  description: 'A book about the coolest cats',
-//  status: 12,
-//  email: 'mirm.silva.90@gmail.com'
-// });
-// //saves the book into the DB
-// CoolCatBook.save ((err, bookFromDB) => {
-//  console.log('saved the book');
-//  console.log(bookFromDB);
-// });
-
-// let HarryPotter = new Book({
-//  name: 'Harry Potter',
-//  description: 'wizards',
-//  status: 112,
-//  email: 'mirm.silva.90@gmail.com'
-// });
-// //saves the book into the DB
-// HarryPotter.save ((err, bookFromDB) => {
-//  console.log('saved the book');
-//  console.log(bookFromDB);
-// });
-
-// let Educated = new Book({
-//  name: 'Educated',
-//  description: 'Ultra orthodox mormon who is not allowed to go to school because the government is indoctrinating everyone.',
-//  status: 201,
-//  email: 'mirm.silva.90@gmail.com'
-// });
-//saves the book into the DB
-// Educated.save ((err, bookFromDB) => {
-//  console.log('saved the book');
-//  console.log(bookFromDB);
-// });
-
 app.get ('/test-login', (req, res) => {
   // grab the token that was sent by the frontend
   const token = req.headers.authorization.split (' ')[1];
@@ -183,7 +147,6 @@ app.put ('/books/:id', (req, res) => {
         email: user.email,
       }).then(foundBook => {
         //update
-        console.log (foundBook);
         foundBook.name = req.body.name;
         foundBook.description = req.body.description;
         foundBook.status = req.body.status;
