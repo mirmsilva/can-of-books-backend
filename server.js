@@ -168,4 +168,8 @@ app.delete('/books/:id', (req, res)=>{
   });
 });
 
+app.put('/books/:id', (req, res)=> {
+
+}
+
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
